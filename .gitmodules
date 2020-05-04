@@ -1,0 +1,3 @@
+[submodule "lib/influxdb-cxx"]
+	path = lib/influxdb-cxx
+	url = https://github.com/awegrzyn/influxdb-cxx.git
