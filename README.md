@@ -10,7 +10,7 @@ quellcode/
 │   ├── src
 │   │   ├── common
 │   │   ├── device
-│   │   │   ├── stm..............STM32F746 Referentzimplementierung
+│   │   │   ├── stm..............STM32F746 Referenzimplementierung
 │   │   │   └── x86_64
 │   │   │       └── uart.........UART Receiver
 │   │   ├── processors

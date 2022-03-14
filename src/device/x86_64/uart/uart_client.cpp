@@ -1,4 +1,4 @@
-#include <cstdio>
+  #include <cstdio>
 #include <fcntl.h>
 #include <termios.h>
 #include <unistd.h>
@@ -7,7 +7,10 @@
 #include "sink_entity.h"
 #include "../common/influx_client.h"
 
+#include "TraceEntity_reader.h"
+#include "flatcc/flatcc_builder.h"
 #include <time.h>
+#include <TraceEntity_builder.h>
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wmissing-noreturn"
@@ -27,8 +30,10 @@ void dumpSinkEntity(sink_entity *se) {
 }
 
 /** Configure according to your setup **/
-const char* dev = "/dev/ttyACM0";
+const char* dev = "/dev/cu.usbmodem143103";
 const char *influxDbConnection = "http://localhost:8086/?db=mydb";
+
+
 
 int main(void) {
 
@@ -69,15 +74,19 @@ int main(void) {
 
     tcflush(serial_dev, TCIFLUSH);
 
+
     uint8_t read_buffer[33];
 #ifndef USE_BENCHMARKING
     sink_entity se;
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "EndlessLoop"
     for (;;) {
         read(serial_dev, &read_buffer, 33);
         convertByteArrayToSinkEntity(&read_buffer, 33, &se);
         dumpSinkEntity(&se);
         db.sendToDB(&se);
     }
+#pragma clang diagnostic pop
 #else
     struct timespec start, diff;
     clockid_t clk_id;

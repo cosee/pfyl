@@ -1,10 +1,12 @@
 test-pfyl
 test_encoder
 test-pfyl.cbp
-lib/ugfx
+lib/
 .idea/
 .gradle/
 cmake-build-debug/
+.cmake
+.project
 CMakeLists.txt.user
 CMakeCache.txt
 CMakeFiles

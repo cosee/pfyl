@@ -1,10 +1,13 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.17)
+set(PFYL_HOME /Users/ramadan/repos/pfyl)
 
 if(NOT DEFINED PFYL_HOME)
     MESSAGE(FATAL_ERROR "Please set the (absolute) pfyl home path")
 ENDIF()
-
+SET(CMAKE_FIND_LIBRARY_PREFIXES "lib")
+SET(CMAKE_FIND_LIBRARY_SUFFIXES ".so" ".a" ".dylib")
 set(STM32_FAMILY F7)
+set(FLATCC_LIB_DIR /Users/ramadan/repos/flatcc)
 set(STM32_CHIP STM32F746NG)
 set(STM_BOARD STM32746G-Discovery)
 set(STM32Cube_DIR /Users/ramadan/STM32Cube/Repository/STM32Cube_FW_F7_V1.16.0)
@@ -40,36 +43,59 @@ INCLUDE_DIRECTORIES(
         ${FreeRTOS_INCLUDE_DIRS}
         ${STM32BSP_INCLUDE_DIR}
         ${uGFX_INCLUDE_DIRS}
+        ${FLATCC_LIB_DIR}/include
 )
 
+
+file(GLOB NANOPB_SRC_FILES
+        "${NANOPB_SRC_ROOT_FOLDER}/*.c"
+        )
 SET(PROJECT_SOURCES
         #flow_impl/CSTM32F7_Helper.cpp # uncomment for cxx support, also see: src/CMakeLists.txt
         f7/main.c
         common/backpressure.c
         common/stm32f7xx_it.c
         ${FLOW_HELPER_SOURCE_FILE}
-        ${SINK_ENTITY_SOURCE_FILE}
-        ${ITM_ENCODER_SOURCE_FILES}
-        ${RAW_ENCODER_SOURCE_FILES}
         ${SOURCE_FUNC_INSTR_SOURCE_FILES}
+        ${TRACE_ENTITY_PROTOBUF_SOURCE_FILES}
+        ${NANOPB_SRC_FILES}
+        ${NANOPB_ENCODER_SOURCE_FILES}
+        ${SINK_NANOPB_SOURCE_FILES}
         )
 
 add_link_options("-Wl,--wrap,malloc")
 add_link_options("-Wl,--wrap,free")
 add_compile_options("-Wa,-mimplicit-it=thumb")
 add_compile_options("-finstrument-functions")
-add_compile_options("-finstrument-functions-exclude-file-list=src/common,lib/ugfx,src/sinks,src/sources,src/processors,src/device/stm/f7/freertos_trace.h,${STM32Cube_DIR}/Drivers/STM32F7xx_HAL_Driver,${STM32Cube_DIR}/Drivers/CMSIS,${STM32Cube_DIR}/Middlewares/Third_Party/FreeRTOS")
+
+list(JOIN NANOPB_SRC_FILES , NANO_PB_JOINED_SRCS)
+add_compile_options("-finstrument-functions-exclude-file-list=src/common,lib/ugfx,src/sinks,src/sources,src/processors,src/device/stm/f7/freertos_trace.h,${STM32Cube_DIR}/Drivers/STM32F7xx_HAL_Driver,${STM32Cube_DIR}/Drivers/CMSIS,${STM32Cube_DIR}/Middlewares/Third_Party/FreeRTOS,${NANO_PB_JOINED_SRCS}")
 add_compile_options("-finstrument-functions-exclude-function-list=__get_MSP")
 
-add_definitions("-DITM_ENABLED -DITM_ENCODER_ENABLED")
-#add_definitions("-DUART1_ENABLED -DBACKPRESSURE_ENABLED -DRAW_ENCODER_ENABLED")
+message(${FLATCC_LIB_DIR}/lib)
+#link_directories(/usr/local/Cellar/flatcc/0.6.0/lib/)
+file(GLOB flatcc_src
+        "/Users/ramadan/repos/flatcc/src/runtime/*.c"
+        )
+#find_library(FLATCC_LIB NAMES flatccrt HINTS /Users/ramadan/repos/flatcc/lib)
+
+#add_definitions("-DITM_ENABLED -DITM_ENCODER_ENABLED")
+add_definitions("-DUART1_ENABLED -DBACKPRESSURE_ENABLED -DRAW_ENCODER_ENABLED")
+
 add_definitions("-DPFYL_USE_FREERTOS -DPFYL_PLATFORM_ARM -DPFYL_USE_STATIC_ALLOC")
 SET(STM32_LINKER_SCRIPT ${CMSIS_LINKER_SCRIPT})
-ADD_EXECUTABLE(${CMAKE_PROJECT_NAME} ${PROJECT_SOURCES} ${CMSIS_SOURCES} ${STM32HAL_SOURCES})
-target_sources(${CMAKE_PROJECT_NAME} PUBLIC ${SOURCE_HEAP_SOURCE_FILES} ${SINK_RAW_SOURCE_FILES} ${STM32BSP_SOURCES} ${FreeRTOS_SOURCES} ${uGFX_SOURCES}
+ADD_EXECUTABLE(${CMAKE_PROJECT_NAME} ${PROJECT_SOURCES} ${CMSIS_SOURCES} ${STM32HAL_SOURCES} ${flatcc_src})
+target_sources(${CMAKE_PROJECT_NAME} PUBLIC ${SOURCE_HEAP_SOURCE_FILES} ${STM32BSP_SOURCES} ${FreeRTOS_SOURCES} ${uGFX_SOURCES}
         ${STM32Cube_DIR}/Drivers/BSP/${STM_BOARD}/stm32746g_discovery.c ${STM32Cube_DIR}/Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_ll_fmc.c)
 
-target_link_libraries(${CMAKE_PROJECT_NAME} m)
+#target_link_libraries(${CMAKE_PROJECT_NAME} flatccrt)
+#find_library(
+#        FLATCC_LIBRARY
+#        NAME flatccrt
+#        PATHS ${FLATCC_LIB_DIR}/lib NO_DEFAULT_PATH
+#)
+
+#target_link_libraries(${CMAKE_PROJECT_NAME} m)
 target_link_options(${CMAKE_PROJECT_NAME} PUBLIC -specs=nano.specs -specs=nosys.specs)
 STM32_SET_TARGET_PROPERTIES(${CMAKE_PROJECT_NAME})
 STM32_ADD_HEX_BIN_TARGETS(${CMAKE_PROJECT_NAME})

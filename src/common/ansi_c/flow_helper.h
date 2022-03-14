@@ -28,7 +28,7 @@ uint32_t flush_buffer();
 void pfyl_begin_transfer();
 
 uint32_t pfyl_transfer(const uint8_t *buf, size_t size);
-
+void alert_sink_entity(const sink_entity *se);
 void pfyl_end_transfer();
 
 #ifdef __cplusplus

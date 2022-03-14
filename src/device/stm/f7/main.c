@@ -12,7 +12,6 @@
 #include "sink_entity.h"
 #include "FreeRTOS.h"
 #include "gfx.h"
-#include "itm_bootstrap.h"
 
 
 #pragma clang diagnostic ignored "-Wmissing-noreturn" // disable clang-tidy errors
@@ -224,7 +223,7 @@ void itm_test(void *pvParameters) {
     }
 }
 
-
+// copyright ugfx.io
 void mandelbrot(float x1, float y1, float x2, float y2) {
     unsigned int i, j, width, height;
     uint16_t iter;
@@ -242,7 +241,6 @@ void mandelbrot(float x1, float y1, float x2, float y2) {
     void* test_entity = malloc(256);
 
     for (i = 0; i < width; i++) {
-        ITM->PORT[3].u8 = 1;           // Write the data
         for (j = 0; j < height; j++) {
             float cy = j * sy / fheight + y1;
             float cx = i * sx / fwidth + x1;
@@ -254,7 +252,6 @@ void mandelbrot(float x1, float y1, float x2, float y2) {
                 x = xx - yy + cx;
             }
             color = ((iter << 8) | (iter & 0xFF));
-            //color = RGB2COLOR(iter<<7, iter<<4, iter);
             gdispDrawPixel(i, j, color);
         }
     }
@@ -350,26 +347,18 @@ int main(void) {
     InitUART1();
 #endif
 
-//    xReturned = xTaskCreate(
-//            mainThread,       /* Function that implements the task. */
-//            "Main",          /* Text name for the task. */
-//            1024,      /* Stack size in words, not bytes. */
-//            (void *) 1,    /* Parameter passed into the task. */
-//            tskIDLE_PRIORITY,/* Priority at which the task is created. */
-//            &xHandle);
+    xReturned = xTaskCreate(
+            mainThread,       /* Function that implements the task. */
+            "Main",          /* Text name for the task. */
+            1024,      /* Stack size in words, not bytes. */
+            (void *) 1,    /* Parameter passed into the task. */
+            tskIDLE_PRIORITY,/* Priority at which the task is created. */
+            &xHandle);
 
 
     xReturned = xTaskCreate(
             backgroundThread,       /* Function that implements the task. */
             "Background",          /* Text name for the task. */
-            256,      /* Stack size in words, not bytes. */
-            (void *) 1,    /* Parameter passed into the task. */
-            tskIDLE_PRIORITY,/* Priority at which the task is created. */
-            &xHandle);
-
-    xReturned = xTaskCreate(
-            itm_test,       /* Function that implements the task. */
-            "itm_test",          /* Text name for the task. */
             256,      /* Stack size in words, not bytes. */
             (void *) 1,    /* Parameter passed into the task. */
             tskIDLE_PRIORITY,/* Priority at which the task is created. */

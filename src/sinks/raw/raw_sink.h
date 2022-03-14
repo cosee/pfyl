@@ -13,7 +13,7 @@ extern "C" {
 #endif
 #include "sink_entity.h"
 int write_to_buffer(const void *buf);
-const uint8_t* getBuffer();
+const uint8_t* getNBBuffer();
 uint32_t getBufferSize();
 void clearBuffer();
 #ifdef __cplusplus

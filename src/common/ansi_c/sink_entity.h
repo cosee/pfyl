@@ -18,12 +18,13 @@ extern void *__real_malloc(size_t size);
 
 enum PFYL_ENTITY_TYPE {
     PFYL_ENTITY_TYPE_MALLOC = 0,
-    PFYL_ENTITY_TYPE_FREE = 6,
     PFYL_ENTITY_TYPE_TASK_CREATE = 1,
     PFYL_ENTITY_TYPE_TASK_RDY = 2,
     PFYL_ENTITY_TYPE_TASK_DELAY = 3,
     PFYL_ENTITY_TYPE_FUNC_ENTER = 4,
-    PFYL_ENTITY_TYPE_FUNC_EXIT = 5
+    PFYL_ENTITY_TYPE_FUNC_EXIT = 5,
+    PFYL_ENTITY_TYPE_FREE = 6,
+    PFYL_ENTITY_TYPE_FAULT_HANDLER = 7
 };
 
 struct __attribute__((packed)) sink_entity_struct {
