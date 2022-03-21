@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  test-container:
+    build:
+      context: .
+    command: >
+      sh -c "cd /app &&
+             cd build && 
+             conan install .. &&
+             cd ../ &&
+             rm CMakeCache.txt &&
+             cmake . && 
+             make && 
+             ./bin/test_sink_model"
+    volumes:
+      - .:/app
+      - /app/build
+      - /app/cmake-build-debug
+      - /app/CMakeFiles

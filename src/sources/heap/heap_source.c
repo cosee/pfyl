@@ -16,7 +16,7 @@ void *__wrap_malloc(size_t bytes) {
 }
 
 void *pfyl_malloc(size_t size, void *return_address) {
-    void *memory_address = __real_malloc(size);
+    void *memory_address = malloc(size);
     updateSinkEntity(&heap_se, PFYL_ENTITY_TYPE_MALLOC, (uint64_t) memory_address, (uint64_t) size,
                      (uint64_t) return_address);
     push_sink_entity(&heap_se);
@@ -29,7 +29,7 @@ void __wrap_free(void *ptr) {
 }
 
 void pfyl_free(void *ptr, void *return_address) {
-    __real_free(ptr);
+    free(ptr);
     updateSinkEntity(&heap_se, PFYL_ENTITY_TYPE_FREE, (uint64_t) ptr, 0, (uint64_t) return_address);
     push_sink_entity(&heap_se);
 }

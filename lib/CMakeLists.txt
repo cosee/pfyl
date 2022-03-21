@@ -1,3 +1,6 @@
-include_directories(${PFYL_HOME}/lib/influxdb-cxx/include)
-set(INFLUX_LIB_PATH ${PFYL_HOME}/lib/influxdb-cxx/build/lib)
-set(INFLUX_LIB InfluxDB)
+# Nanopb Settings
+set(NANO_PB_ROOT_FOLDER "${CMAKE_CURRENT_LIST_DIR}/nanopb")
+list(APPEND CMAKE_MODULE_PATH ${NANO_PB_ROOT_FOLDER}/extra)
+set(NANOPB_SRC_ROOT_FOLDER ${NANO_PB_ROOT_FOLDER})
+find_package(Nanopb REQUIRED)
+include_directories(${NANOPB_INCLUDE_DIRS})

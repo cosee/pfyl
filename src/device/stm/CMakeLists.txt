@@ -51,7 +51,6 @@ file(GLOB NANOPB_SRC_FILES
         "${NANOPB_SRC_ROOT_FOLDER}/*.c"
         )
 SET(PROJECT_SOURCES
-        #flow_impl/CSTM32F7_Helper.cpp # uncomment for cxx support, also see: src/CMakeLists.txt
         f7/main.c
         common/backpressure.c
         common/stm32f7xx_it.c

@@ -24,8 +24,8 @@ uint8_t push_sink_entity(const sink_entity *se) {
     traceEntity.data2 = se->data2;
     traceEntity.data3 = se->data3;
 
-    pb_ostream_t stream = pb_ostream_from_buffer(buf, sizeof(buf));
-    pb_encode(&stream, pfyl_TraceEntity_fields, &traceEntity);
+    //pb_ostream_t stream = pb_ostream_from_buffer(buf, sizeof(buf));
+    //pb_encode(&stream, pfyl_TraceEntity_fields, &traceEntity);
     return write_to_buffer(buf);
 #endif
 }

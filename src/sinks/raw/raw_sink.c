@@ -3,7 +3,6 @@
 //
 
 #include "sink_entity.h"
-#include <stddef.h>
 #include <string.h>
 #include "raw_sink.h"
 

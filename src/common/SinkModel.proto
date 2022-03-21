@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+message PfylTaskCreated {
+  uint64 tick = 1;
+  string taskName = 2;
+}
+
+message PfylTaskDeleted {
+  uint64 tick = 1;
+  string taskName = 2;
+}
+
+message PfylTaskState{
+  uint64 tick = 1;
+  string taskName = 2;
+  enum EnumPfylTaskState {
+    ACTIVATED = 0;
+    STOPPED = 1;
+  }
+}

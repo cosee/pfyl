@@ -1,35 +1,27 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.13)
 project(test-pfyl)
 
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+if(NOT EXISTS "${PROJECT_SOURCE_DIR}/build/FindCppUTest.cmake")
+    MESSAGE(FATAL_ERROR "Please run 'conan install' first")
+endif()
+include(${PFYL_HOME}/build/FindCppUTest.cmake)
+include(${PFYL_HOME}/lib/CMakeLists.txt)
 include(src/CMakeLists.txt)
 
-include_directories(${CPPUTEST_PROJECT_DIR}/include)
-include_directories(${CPPUTEST_PROJECT_DIR}/include/CppUTest)
+list(APPEND CMAKE_MODULE_PATH ${PFYL_HOME}/build)
+find_package(CppUTest REQUIRED)
 
-
-link_directories(${CPPUTEST_LIB_DIR})
-
-link_libraries(CppUTest CppUTestExt)
-
-add_executable(test_encoder
-        ${RAW_DECODER_SOURCE_FILES}
-        ${RAW_ENCODER_SOURCE_FILES}
-        ${SINK_RAW_SOURCE_FILES}
-        tests/processors/raw_encoding_test.cpp
+add_executable(test_sink_model
+        tests/common/sink_model_test.cpp
         tests/MainTest.cpp
+        ${NANOPB_SRCS}
+        ${NANOPB_HDRS}
+        ${SINK_MODEL_SOURCE_FILE}
         )
 
-add_definitions("-DRAW_ENCODER_ENABLED")
-add_executable(test-pfyl
-        ${SINK_RAW_SOURCE_FILES}
-        ${SOURCE_HEAP_SOURCE_FILES}
-        ${RAW_DECODER_SOURCE_FILES}
-        ${RAW_ENCODER_SOURCE_FILES}
-        tests/MainTest.cpp
-        tests/sinks/raw_sink_test.cpp
-        tests/processors/raw_decoding_test.cpp
-        tests/processors/raw_encoding_test.cpp)
-        
-target_link_options(test-pfyl PRIVATE "-Wl,--wrap,malloc")
-target_link_options(test-pfyl PRIVATE "-Wl,--wrap,free")
+target_link_libraries(test_sink_model PRIVATE
+        CppUTest::CppUTest
+        CppUTest::CppUTestExt)
 

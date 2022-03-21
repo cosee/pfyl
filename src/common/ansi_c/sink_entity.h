@@ -11,7 +11,7 @@
 #ifdef __cplusplus
 static uint64_t reference_tick;
 #else
-uint64_t reference_tick;
+extern uint64_t reference_tick;
 #endif
 
 extern void *__real_malloc(size_t size);

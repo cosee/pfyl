@@ -3,7 +3,10 @@ test_encoder
 test-pfyl.cbp
 lib/
 .idea/
+bin/
 .gradle/
+.build/
+build/
 cmake-build-debug/
 .cmake
 .project
@@ -17,7 +20,7 @@ cmake_install.cmake
 install_manifest.txt
 compile_commands.json
 CTestTestfile.cmake
-_deps
+_deps0
 #Prerequisites
 *.d
 
