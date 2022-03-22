@@ -6,8 +6,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 if(NOT EXISTS "${PROJECT_SOURCE_DIR}/build/FindCppUTest.cmake")
     MESSAGE(FATAL_ERROR "Please run 'conan install' first")
 endif()
+
 include(${PFYL_HOME}/build/FindCppUTest.cmake)
-include(${PFYL_HOME}/lib/CMakeLists.txt)
 include(src/CMakeLists.txt)
 
 list(APPEND CMAKE_MODULE_PATH ${PFYL_HOME}/build)
