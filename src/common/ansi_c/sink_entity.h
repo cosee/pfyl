@@ -7,6 +7,7 @@
 
 #include <stdint.h>
 #include <stddef.h>
+#include "SinkModel.pb.h"
 
 #ifdef __cplusplus
 static uint64_t reference_tick;
@@ -27,46 +28,45 @@ enum PFYL_ENTITY_TYPE {
     PFYL_ENTITY_TYPE_FAULT_HANDLER = 7
 };
 
-struct __attribute__((packed)) sink_entity_struct {
+struct sink_entity_struct {
     uint8_t type;
     uint64_t tick;
-    uint64_t data;
-    uint64_t data2;
-    uint64_t data3;
+    void* data;
+    void* dataFields;
 };
 
 typedef struct sink_entity_struct sink_entity;
-
-static inline sink_entity *create_sink_entity_full(enum PFYL_ENTITY_TYPE type, uint64_t tick, uint64_t data,
-                                                   uint64_t data2, uint64_t data3) {
-    sink_entity *se = (sink_entity *) __real_malloc(sizeof(sink_entity));
-    se->type = type;
-    se->tick = tick;
-    se->data = data;
-    se->data2 = data2;
-    se->data3 = data3;
-    return se;
-}
-
-static inline void
-updateSinkEntity(sink_entity *se, enum PFYL_ENTITY_TYPE type, uint64_t data, uint64_t data2, uint64_t data3) {
-    se->type = type;
-    se->tick = reference_tick;
-    se->data = data;
-    se->data2 = data2;
-    se->data3 = data3;
-}
-
-static inline sink_entity *
-create_sink_entity(enum PFYL_ENTITY_TYPE type, uint64_t data, uint64_t data2, uint64_t data3) {
-    sink_entity *se = (sink_entity *) __real_malloc(sizeof(sink_entity));
-    se->type = type;
-    se->tick = reference_tick;
-    se->data = data;
-    se->data2 = data2;
-    se->data3 = data3;
-    return se;
-}
+//
+//static inline sink_entity *create_sink_entity_full(enum PFYL_ENTITY_TYPE type, uint64_t tick, uint64_t data,
+//                                                   uint64_t data2, uint64_t data3) {
+//    sink_entity *se = (sink_entity *) __real_malloc(sizeof(sink_entity));
+//    se->type = type;
+//    se->tick = tick;
+//    se->data = data;
+//    se->data2 = data2;
+//    se->data3 = data3;
+//    return se;
+//}
+//
+//static inline void
+//updateSinkEntity(sink_entity *se, enum PFYL_ENTITY_TYPE type, uint64_t data, uint64_t data2, uint64_t data3) {
+//    se->type = type;
+//    se->tick = reference_tick;
+//    se->data = data;
+//    se->data2 = data2;
+//    se->data3 = data3;
+//}
+//
+//static inline sink_entity *
+//create_sink_entity(enum PFYL_ENTITY_TYPE type, uint64_t data, uint64_t data2, uint64_t data3) {
+//    sink_entity *se = (sink_entity *) __real_malloc(sizeof(sink_entity));
+//    se->type = type;
+//    se->tick = reference_tick;
+//    se->data = data;
+//    se->data2 = data2;
+//    se->data3 = data3;
+//    return se;
+//}
 
 static inline void increase_tick() {
     reference_tick++;

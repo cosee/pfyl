@@ -13,9 +13,11 @@ include(src/CMakeLists.txt)
 list(APPEND CMAKE_MODULE_PATH ${PFYL_HOME}/build)
 find_package(CppUTest REQUIRED)
 
+include_directories(${HEADER_FREERTOS_TRACE_DIRECTORY})
 add_executable(test_sink_model
+        tests/traces/freertos_trace_test.cpp
         tests/common/sink_model_test.cpp
-        tests/MainTest.cpp
+        tests/main_test.cpp
         ${NANOPB_SRCS}
         ${NANOPB_HDRS}
         ${SINK_MODEL_SOURCE_FILE}

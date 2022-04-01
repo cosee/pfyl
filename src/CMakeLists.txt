@@ -38,4 +38,5 @@ include_directories(${CMAKE_CURRENT_LIST_DIR}/sinks/nanopb)
 include_directories(${CMAKE_CURRENT_LIST_DIR}/processors/common)
 
 include_directories(${CMAKE_CURRENT_LIST_DIR}/sources/heap)
-include_directories(${CMAKE_CURRENT_LIST_DIR}/sources/freertos)
+
+set(HEADER_FREERTOS_TRACE_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/sources/freertos)

@@ -75,4 +75,4 @@ Mkfile.old
 dkms.conf
 
 # protobuf
-*.pb
+*.pb.*

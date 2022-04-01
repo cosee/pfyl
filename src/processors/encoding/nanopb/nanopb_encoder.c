@@ -7,44 +7,19 @@
 #include <pb_encode.h>
 #include "sink_entity.h"
 #include "nanopb_buffer.h"
-#include "TraceEntity.pb.h"
+#include "SinkModel.pb.h"
 
-uint8_t push_sink_entity(const sink_entity *se) {
-    uint8_t buf[200] = {0};
-    pfyl_TraceEntity traceEntity = {};
-    traceEntity.type = se->type;
-    traceEntity.tick = se->tick;
-    traceEntity.data = se->data;
-    traceEntity.has_data = se->data != 0;
-    traceEntity.data2 = se->data2;
-    traceEntity.has_data2 = se->data2 != 0;
-    traceEntity.data3 = se->data3;
-    traceEntity.has_data3 = se->data3 != 0;
+void push_pfyl_trace(const pfyl_freertos_trace_entity* trace) {
 
-    size_t messageSize;
-    pb_ostream_t stream = pb_ostream_from_buffer(buf, sizeof(buf));
-    pb_encode_delimited(&stream, pfyl_TraceEntity_fields, &traceEntity);
-    pb_get_encoded_size(&messageSize, pfyl_TraceEntity_fields, &traceEntity);
-    return write_to_buffer(buf, messageSize);
 }
 
-void alert_sink_entity(const sink_entity *se) {
-    uint8_t buf[200] = {0};
-    pfyl_TraceEntity traceEntity = {};
-    traceEntity.type = se->type;
-    traceEntity.tick = se->tick;
-    traceEntity.data = se->data;
-    traceEntity.has_data = se->data != 0;
-    traceEntity.data2 = se->data2;
-    traceEntity.has_data2 = se->data2 != 0;
-    traceEntity.data3 = se->data3;
-    traceEntity.has_data3 = se->data3 != 0;
-
+uint8_t push_sink_entity( const pb_msgdesc_t *fields, const void *src_struct) {
+    char buf[100];
     size_t messageSize;
     pb_ostream_t stream = pb_ostream_from_buffer(buf, sizeof(buf));
-    pb_encode_delimited(&stream, pfyl_TraceEntity_fields, &traceEntity);
-    pb_get_encoded_size(&messageSize, pfyl_TraceEntity_fields, &traceEntity);
-    pfyl_transfer(buf, messageSize + 1);
+    pb_encode_delimited(&stream, fields, src_struct);
+    pb_get_encoded_size(&messageSize, fields, src_struct);
+    return write_to_buffer(buf, messageSize);
 }
 
 uint32_t flush_buffer() {

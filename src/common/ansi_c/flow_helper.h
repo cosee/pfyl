@@ -6,11 +6,13 @@
 #define TEST_PFYL_CONTROLLER_HELPER_H
 
 #include "sink_entity.h"
+#include "freertos_trace.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+void push_pfyl_trace(const pfyl_freertos_trace_entity*);
 /**
  * adds sink_entity to buffer and transmits it
  * must delete sink_entity
