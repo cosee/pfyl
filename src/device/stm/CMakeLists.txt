@@ -59,7 +59,7 @@ SET(PROJECT_SOURCES
         ${TRACE_ENTITY_PROTOBUF_SOURCE_FILES}
         ${NANOPB_SRC_FILES}
         ${NANOPB_ENCODER_SOURCE_FILES}
-        ${SINK_NANOPB_SOURCE_FILES}
+        ${SINK_LINEAR_SOURCE_FILES}
         )
 
 add_link_options("-Wl,--wrap,malloc")

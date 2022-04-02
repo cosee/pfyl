@@ -6,7 +6,7 @@
 #include <flow_helper.h>
 #include <pb_encode.h>
 #include "sink_entity.h"
-#include "nanopb_buffer.h"
+#include "pfyl_sink.h"
 #include "SinkModel.pb.h"
 
 void push_pfyl_trace(const pfyl_freertos_trace_entity* trace) {
@@ -24,7 +24,7 @@ uint8_t push_sink_entity( const pb_msgdesc_t *fields, const void *src_struct) {
 
 uint32_t flush_buffer() {
     uint32_t bytes_written = 0;
-    const uint8_t *buf = getNBBuffer();
+    const uint8_t *buf = getBuffer();
     uint32_t buf_size = getBufferSize();
     pfyl_begin_transfer();
     pfyl_transfer(buf, buf_size);

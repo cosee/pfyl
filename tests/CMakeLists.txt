@@ -17,7 +17,9 @@ include_directories(${HEADER_FREERTOS_TRACE_DIRECTORY})
 add_executable(test_sink_model
         tests/traces/freertos_trace_test.cpp
         tests/common/sink_model_test.cpp
+        tests/sinks/linear_buffer_test.cpp
         tests/main_test.cpp
+        ${SINK_LINEAR_SOURCE_FILES}
         ${NANOPB_SRCS}
         ${NANOPB_HDRS}
         ${SINK_MODEL_SOURCE_FILE}

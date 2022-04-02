@@ -26,13 +26,14 @@ set(RAW_ENCODER_SOURCE_FILES
 
 set(NANOPB_ENCODER_SOURCE_FILES
         ${CMAKE_CURRENT_LIST_DIR}/processors/encoding/nanopb/nanopb_encoder.c)
-set(SINK_NANOPB_SOURCE_FILES
-        ${CMAKE_CURRENT_LIST_DIR}/sinks/nanopb/nanopb_buffer.c)
+set(SINK_LINEAR_SOURCE_FILES
+        ${CMAKE_CURRENT_LIST_DIR}/sinks/nanopb/linear_buffer.c)
 
 set(ITM_ENCODER_SOURCE_FILES
         ${CMAKE_CURRENT_LIST_DIR}/processors/encoding/itm/itm_encoder.c)
 
 # TODO: refactor so include does not happen immediately
+include_directories(${CMAKE_CURRENT_LIST_DIR}/sinks)
 include_directories(${CMAKE_CURRENT_LIST_DIR}/sinks/nanopb)
 
 include_directories(${CMAKE_CURRENT_LIST_DIR}/processors/common)
