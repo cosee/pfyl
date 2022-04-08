@@ -3,6 +3,16 @@
 //
 #include "sink_entity.h"
 
-#ifndef __cplusplus
-uint64_t reference_tick;
-#endif
+static uint64_t referenceTick;
+
+uint64_t getReferenceTick() {
+    return referenceTick;
+}
+
+void increaseTick() {
+    referenceTick++;
+}
+
+void setReferenceTick(uint64_t newReferenceTick) {
+    referenceTick = newReferenceTick;
+}

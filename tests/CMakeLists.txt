@@ -19,13 +19,29 @@ add_executable(test_sink_model
         tests/common/sink_model_test.cpp
         tests/sinks/linear_buffer_test.cpp
         tests/main_test.cpp
+        ${SINK_ENTITY_SOURCE_FILE}
         ${SINK_LINEAR_SOURCE_FILES}
         ${NANOPB_SRCS}
         ${NANOPB_HDRS}
         ${SINK_MODEL_SOURCE_FILE}
         )
 
+add_executable(test_nanopb_encoder
+        tests/processors/nanopb_encoder_test.cpp
+        tests/main_test.cpp
+        ${SINK_ENTITY_SOURCE_FILE}
+        ${SINK_LINEAR_SOURCE_FILES}
+        ${NANOPB_ENCODER_SOURCE_FILES}
+        ${NANOPB_SRCS}
+        ${NANOPB_HDRS}
+        ${SINK_MODEL_SOURCE_FILE}
+        )
+
 target_link_libraries(test_sink_model PRIVATE
+        CppUTest::CppUTest
+        CppUTest::CppUTestExt)
+
+target_link_libraries(test_nanopb_encoder PRIVATE
         CppUTest::CppUTest
         CppUTest::CppUTestExt)
 

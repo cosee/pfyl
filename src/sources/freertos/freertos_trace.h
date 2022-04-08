@@ -23,17 +23,17 @@ static pfyl_freertos_trace_entity freertosTrace = {
         .taskHandle = nullptr,
 };
 
-void inline updateFreertosTrace(pfyl_freertos_trace_entity* trace, PFYL_FREERTOS_TRACE_ENTITY_TYPE type,
-                         const void* taskHandle = nullptr, const char* taskName = nullptr) {
+void inline updateFreertosTrace(pfyl_freertos_trace_entity* trace, enum PFYL_FREERTOS_TRACE_ENTITY_TYPE type,
+                         const void* taskHandle, const char* taskName) {
     trace->taskName = taskName;
     trace->taskHandle = taskHandle;
     trace->traceType = type;
-    trace->tick = reference_tick;
+    trace->tick = getReferenceTick();
 }
 
 
 #define traceTASK_SWITCHED_IN() { \
-		updateFreertosTrace(&freertosTrace, PFYL_FREERTOS_TRACE_ENTITY_TYPE_TASK_RDY, pxCurrentTCB); \
+		updateFreertosTrace(&freertosTrace, PFYL_FREERTOS_TRACE_ENTITY_TYPE_TASK_RDY, pxCurrentTCB, nullptr); \
 		push_pfyl_trace(&freertosTrace); \
 }
 
@@ -43,7 +43,7 @@ void inline updateFreertosTrace(pfyl_freertos_trace_entity* trace, PFYL_FREERTOS
 }
 
 #define traceTASK_SWITCHED_OUT() { \
-    updateFreertosTrace(&freertosTrace, PFYL_FREERTOS_TRACE_ENTITY_TYPE_TASK_DELAY, pxCurrentTCB); \
+    updateFreertosTrace(&freertosTrace, PFYL_FREERTOS_TRACE_ENTITY_TYPE_TASK_DELAY, pxCurrentTCB, nullptr); \
     push_pfyl_trace(&freertosTrace); \
 }
 #endif //F7_DEVICE_FREERTOS_TRACE_H

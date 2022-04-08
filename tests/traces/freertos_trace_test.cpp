@@ -16,10 +16,11 @@ extern "C" void push_pfyl_trace(const pfyl_freertos_trace_entity* trace) {
 
 TEST_GROUP(FreeRTOSTraceTestGroup) {
     void teardown() {
-        reference_tick = 0;
+        setReferenceTick(0);
         mock().clear();
     }
 };
+
 typedef struct {
     char pcTaskName[32];
 } FreeRTOSTaskMock;
@@ -64,7 +65,7 @@ TEST(FreeRTOSTraceTestGroup, TestTraceRecordsTaskReadyAfterCreation) {
         CHECK_EQUAL(freertosTrace.traceType, PFYL_FREERTOS_TRACE_ENTITY_TYPE_TASK_CREATE);
         CHECK_EQUAL(freertosTrace.tick, 0);
     }
-    reference_tick++;
+    increaseTick();
     {
         traceTASK_SWITCHED_IN();
         POINTERS_EQUAL(freertosTrace.taskName, nullptr);
@@ -87,7 +88,7 @@ TEST(FreeRTOSTraceTestGroup, TestTraceRecordsTaskInactive) {
         CHECK_EQUAL(freertosTrace.traceType, PFYL_FREERTOS_TRACE_ENTITY_TYPE_TASK_CREATE);
         CHECK_EQUAL(freertosTrace.tick, 0);
     }
-    reference_tick++;
+    increaseTick();
     {
         traceTASK_SWITCHED_OUT();
         POINTERS_EQUAL(freertosTrace.taskName, nullptr);
@@ -110,7 +111,7 @@ TEST(FreeRTOSTraceTestGroup, TestTraceRecordsTaskInactiveAfterActive) {
         CHECK_EQUAL(freertosTrace.traceType, PFYL_FREERTOS_TRACE_ENTITY_TYPE_TASK_CREATE);
         CHECK_EQUAL(freertosTrace.tick, 0);
     }
-    reference_tick++;
+    increaseTick();
     {
         traceTASK_SWITCHED_IN();
         STRCMP_EQUAL(freertosTrace.taskName, nullptr);
@@ -118,7 +119,7 @@ TEST(FreeRTOSTraceTestGroup, TestTraceRecordsTaskInactiveAfterActive) {
         CHECK_EQUAL(freertosTrace.traceType, PFYL_FREERTOS_TRACE_ENTITY_TYPE_TASK_RDY);
         CHECK_EQUAL(freertosTrace.tick, 1);
     }
-    reference_tick++;
+    increaseTick();
     {
         traceTASK_SWITCHED_OUT();
         POINTERS_EQUAL(freertosTrace.taskName, nullptr);
