@@ -4,29 +4,28 @@
 
 
 #include <pb_encode.h>
+#include <printf.h>
 #include "sink_entity.h"
 #include "flow_helper.h"
 #include "pfyl_sink.h"
 #include "SinkModel.pb.h"
 
+#define MAX_PROTO_MESSAGE_SIZE 44
 void push_pfyl_trace(const pfyl_freertos_trace_entity* trace) {
-
-}
-
-void pfyl_begin_transfer() {
-
-}
-
-uint32_t pfyl_transfer(const uint8_t *buf, size_t size) {
-    return 1;
-}
-
-void pfyl_end_transfer() {
-
+    const pb_msgdesc_t *fieldDescription = nullptr;
+    switch(trace->traceType) {
+        case PFYL_FREERTOS_TRACE_ENTITY_TYPE_TASK_CREATE:
+            fieldDescription = PfylTaskCreated_fields;
+        case PFYL_FREERTOS_TRACE_ENTITY_TYPE_TASK_DELAY:
+        case PFYL_FREERTOS_TRACE_ENTITY_TYPE_TASK_RDY:
+        default:
+            fieldDescription = PfylTaskState_fields;
+    }
+    push_sink_entity(fieldDescription, trace);
 }
 
 uint8_t push_sink_entity( const pb_msgdesc_t *fields, const void *src_struct) {
-    char buf[100];
+    char buf[MAX_PROTO_MESSAGE_SIZE] = {0};
     size_t messageSize;
     pb_ostream_t stream = pb_ostream_from_buffer((uint8_t *)buf, sizeof(buf));
     pb_encode_delimited(&stream, fields, src_struct);

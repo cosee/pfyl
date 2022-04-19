@@ -1,0 +1,3 @@
+PfylTaskState.taskName max_size:32
+PfylTaskDeleted.taskName max_size:32
+PfylTaskCreated.taskName max_size:32

@@ -41,3 +41,4 @@ include_directories(${CMAKE_CURRENT_LIST_DIR}/processors/common)
 include_directories(${CMAKE_CURRENT_LIST_DIR}/sources/heap)
 
 set(HEADER_FREERTOS_TRACE_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/sources/freertos)
+set(FREERTOS_TRACE_SOURCE_FILES ${CMAKE_CURRENT_LIST_DIR}/sources/freertos/freertos_trace.c)

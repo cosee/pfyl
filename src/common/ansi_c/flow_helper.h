@@ -6,11 +6,22 @@
 #define TEST_PFYL_CONTROLLER_HELPER_H
 
 #include "sink_entity.h"
-#include "freertos_trace.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+enum PFYL_FREERTOS_TRACE_ENTITY_TYPE {
+    PFYL_FREERTOS_TRACE_ENTITY_TYPE_TASK_CREATE = 1,
+    PFYL_FREERTOS_TRACE_ENTITY_TYPE_TASK_RDY = 2,
+    PFYL_FREERTOS_TRACE_ENTITY_TYPE_TASK_DELAY = 3,
+};
+typedef struct {
+    uint8_t traceType;
+    uint64_t tick;
+    const char* taskName;
+    const void* taskHandle;
+} pfyl_freertos_trace_entity;
 
 void push_pfyl_trace(const pfyl_freertos_trace_entity*);
 /**

@@ -18,17 +18,17 @@ typedef enum _PfylTaskState_EnumPfylTaskState {
 /* Struct definitions */
 typedef struct _PfylTaskCreated { 
     uint64_t tick; 
-    pb_callback_t taskName; 
+    char taskName[32]; 
 } PfylTaskCreated;
 
 typedef struct _PfylTaskDeleted { 
     uint64_t tick; 
-    pb_callback_t taskName; 
+    char taskName[32]; 
 } PfylTaskDeleted;
 
 typedef struct _PfylTaskState { 
     uint64_t tick; 
-    pb_callback_t taskName; 
+    char taskName[32]; 
 } PfylTaskState;
 
 
@@ -43,12 +43,12 @@ extern "C" {
 #endif
 
 /* Initializer values for message structs */
-#define PfylTaskCreated_init_default             {0, {{NULL}, NULL}}
-#define PfylTaskDeleted_init_default             {0, {{NULL}, NULL}}
-#define PfylTaskState_init_default               {0, {{NULL}, NULL}}
-#define PfylTaskCreated_init_zero                {0, {{NULL}, NULL}}
-#define PfylTaskDeleted_init_zero                {0, {{NULL}, NULL}}
-#define PfylTaskState_init_zero                  {0, {{NULL}, NULL}}
+#define PfylTaskCreated_init_default             {0, ""}
+#define PfylTaskDeleted_init_default             {0, ""}
+#define PfylTaskState_init_default               {0, ""}
+#define PfylTaskCreated_init_zero                {0, ""}
+#define PfylTaskDeleted_init_zero                {0, ""}
+#define PfylTaskState_init_zero                  {0, ""}
 
 /* Field tags (for use in manual encoding/decoding) */
 #define PfylTaskCreated_tick_tag                 1
@@ -61,20 +61,20 @@ extern "C" {
 /* Struct field encoding specification for nanopb */
 #define PfylTaskCreated_FIELDLIST(X, a) \
 X(a, STATIC,   SINGULAR, UINT64,   tick,              1) \
-X(a, CALLBACK, SINGULAR, STRING,   taskName,          2)
-#define PfylTaskCreated_CALLBACK pb_default_field_callback
+X(a, STATIC,   SINGULAR, STRING,   taskName,          2)
+#define PfylTaskCreated_CALLBACK NULL
 #define PfylTaskCreated_DEFAULT NULL
 
 #define PfylTaskDeleted_FIELDLIST(X, a) \
 X(a, STATIC,   SINGULAR, UINT64,   tick,              1) \
-X(a, CALLBACK, SINGULAR, STRING,   taskName,          2)
-#define PfylTaskDeleted_CALLBACK pb_default_field_callback
+X(a, STATIC,   SINGULAR, STRING,   taskName,          2)
+#define PfylTaskDeleted_CALLBACK NULL
 #define PfylTaskDeleted_DEFAULT NULL
 
 #define PfylTaskState_FIELDLIST(X, a) \
 X(a, STATIC,   SINGULAR, UINT64,   tick,              1) \
-X(a, CALLBACK, SINGULAR, STRING,   taskName,          2)
-#define PfylTaskState_CALLBACK pb_default_field_callback
+X(a, STATIC,   SINGULAR, STRING,   taskName,          2)
+#define PfylTaskState_CALLBACK NULL
 #define PfylTaskState_DEFAULT NULL
 
 extern const pb_msgdesc_t PfylTaskCreated_msg;
@@ -87,9 +87,9 @@ extern const pb_msgdesc_t PfylTaskState_msg;
 #define PfylTaskState_fields &PfylTaskState_msg
 
 /* Maximum encoded size of messages (where known) */
-/* PfylTaskCreated_size depends on runtime parameters */
-/* PfylTaskDeleted_size depends on runtime parameters */
-/* PfylTaskState_size depends on runtime parameters */
+#define PfylTaskCreated_size                     44
+#define PfylTaskDeleted_size                     44
+#define PfylTaskState_size                       44
 
 #ifdef __cplusplus
 } /* extern "C" */

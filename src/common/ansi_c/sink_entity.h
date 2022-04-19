@@ -4,7 +4,11 @@
 
 #ifndef TEST_PFYL_SINK_ENTITY_H
 #define TEST_PFYL_SINK_ENTITY_H
+
+#ifndef __cplusplus
 #define nullptr ((void*)0)
+#endif
+
 #include <stdint.h>
 #include <stddef.h>
 #include "SinkModel.pb.h"

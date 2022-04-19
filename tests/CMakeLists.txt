@@ -9,6 +9,7 @@ endif()
 
 include(${PFYL_HOME}/build/FindCppUTest.cmake)
 include(src/CMakeLists.txt)
+include(src/platform/unix_comp/CMakeLists.txt)
 
 list(APPEND CMAKE_MODULE_PATH ${PFYL_HOME}/build)
 find_package(CppUTest REQUIRED)
@@ -24,6 +25,8 @@ add_executable(test_sink_model
         ${NANOPB_SRCS}
         ${NANOPB_HDRS}
         ${SINK_MODEL_SOURCE_FILE}
+        ${FREERTOS_TRACE_SOURCE_FILES}
+        ${PFYL_UNIX_MUTEX_SOURCE_FILES}
         )
 
 add_executable(test_nanopb_encoder
@@ -35,6 +38,8 @@ add_executable(test_nanopb_encoder
         ${NANOPB_SRCS}
         ${NANOPB_HDRS}
         ${SINK_MODEL_SOURCE_FILE}
+        ${FREERTOS_TRACE_SOURCE_FILES}
+        ${PFYL_UNIX_MUTEX_SOURCE_FILES}
         )
 
 target_link_libraries(test_sink_model PRIVATE
