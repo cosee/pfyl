@@ -78,7 +78,7 @@ const void *pfylGetSink() {
 }
 
 uint32_t pfylGetContentLength() {
-    return write_index;
+    return write_index - 1;
 }
 
 uint32_t pfylGetSinkSize() {

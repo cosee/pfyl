@@ -1,15 +1,17 @@
 syntax = "proto3";
 
+// TODO: refactor this
 message PfylTaskCreated {
   uint64 tick = 1;
   string taskName = 2;
 }
 
+// TODO: refactor this
 message PfylTaskDeleted {
   uint64 tick = 1;
   string taskName = 2;
 }
-
+// TODO: refactor this
 message PfylTaskState{
   uint64 tick = 1;
   string taskName = 2;

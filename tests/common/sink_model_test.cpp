@@ -42,7 +42,6 @@ TEST(SinkModelTest, TestDecodeEncodedTaskTrace) {
     }
     {
         PfylTaskCreated decodedMessage = PfylTaskCreated_init_zero;
-        uint8_t taskNameBuffer[24] = {0};
         pb_istream_t decodeStream = pb_istream_from_buffer(buffer, message_length);
         bool status = pb_decode(&decodeStream, PfylTaskCreated_fields, &decodedMessage);
         CHECK(status);
