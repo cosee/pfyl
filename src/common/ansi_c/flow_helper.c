@@ -2,6 +2,8 @@
 // this file is only required for unit tests
 // Created by mohamad on 16.01.20.
 //
+#include <pb_encode.h>
+#include "sink_entity.h"
 #include "flow_helper.h"
 
 /**

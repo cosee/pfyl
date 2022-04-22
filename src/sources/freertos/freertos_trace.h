@@ -4,7 +4,7 @@
 
 #ifndef F7_DEVICE_FREERTOS_TRACE_H
 #define F7_DEVICE_FREERTOS_TRACE_H
-
+#include "flow_helper.h"
 #ifdef __cplusplus
 extern "C" {
 #endif

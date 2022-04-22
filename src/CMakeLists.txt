@@ -10,8 +10,6 @@ set(FLOW_HELPER_SOURCE_FILE ${CMAKE_CURRENT_LIST_DIR}/common/ansi_c/flow_helper.
 
 set(COMMON_SOURCE_FILES
         ${CMAKE_CURRENT_LIST_DIR}/common/ansi_c/flow_helper.c)
-set(TRACE_ENTITY_PROTOBUF_SOURCE_FILES
-        ${CMAKE_CURRENT_LIST_DIR}/processors/common/SinkModel.pb.c)
 set(SOURCE_HEAP_SOURCE_FILES
         ${CMAKE_CURRENT_LIST_DIR}/sources/heap/heap_source.c)
 set(SINK_RAW_SOURCE_FILES

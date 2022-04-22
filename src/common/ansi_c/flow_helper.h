@@ -5,7 +5,9 @@
 #ifndef TEST_PFYL_CONTROLLER_HELPER_H
 #define TEST_PFYL_CONTROLLER_HELPER_H
 
+#include <inttypes.h>
 #include "sink_entity.h"
+#include "pb_encode.h"
 
 #ifdef __cplusplus
 extern "C" {

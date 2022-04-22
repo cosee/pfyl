@@ -1,9 +1,8 @@
-// Mandelbrot-Set Demo Application
+//
 // Created by mohamad on 11.12.19.
 //
 
 #include <stm32f7xx_hal.h>
-#include <stm32746g_discovery.h>
 #include <stdlib.h>
 #include <cmsis_os.h>
 #include <stm32f7xx_hal_tim.h>
@@ -12,9 +11,6 @@
 #include "sink_entity.h"
 #include "FreeRTOS.h"
 #include "gfx.h"
-
-
-#pragma clang diagnostic ignored "-Wmissing-noreturn" // disable clang-tidy errors
 
 static UART_HandleTypeDef uart1;
 
@@ -34,7 +30,7 @@ inline void __attribute__((no_instrument_function)) pfyl_begin_transfer() {
 
 uint32_t __attribute__((no_instrument_function)) pfyl_transfer(const uint8_t *buf, size_t size) {
 #ifdef UART1_ENABLED
-    return HAL_UART_Transmit(&uart1, buf, size, HAL_UART_TIMEOUT_VALUE);
+    return HAL_UART_Transmit(&uart1, (uint8_t*) buf, size, HAL_UART_TIMEOUT_VALUE);
 #else
     return 0;
 #endif
@@ -138,53 +134,7 @@ void __attribute__((no_instrument_function)) SystemClock_Config(void) {
 void __attribute__((no_instrument_function)) initAll(void) {
     HAL_Init();
     SystemClock_Config();
-
 }
-
-void togggle() {
-    volatile char temp[60] = {0};
-    BSP_LED_Toggle(LED1);
-
-}
-
-void toogleLed1() {
-    volatile char temp[6] = {0};
-    togggle();
-}
-
-void toogleLed2() {
-    volatile char temp[60] = {0};
-    BSP_LED_Toggle(LED1);
-}
-
-void backgroundThread(void *pvParameters) {
-    int i = 1;
-    void* persisted_test_entity = malloc(256);
-    for (;;) {
-//        flush_buffer();
-        void *test_entity = malloc(5+i);
-        void *test_entity2 = malloc(5+2*i);
-        void *test_entity3 = malloc(5);
-        void *test_entity4 = malloc(5);
-        void *test_entity5 = malloc(5);
-        void *leaked_memory = malloc(4);
-        toogleLed1();
-        vTaskDelay(1000);
-        free(test_entity);
-        free(test_entity2);
-        free(test_entity3);
-        free(test_entity4);
-        free(test_entity5);
-        i++;
-        if(i > 30) {
-            i = 1;
-        }
-#ifdef PFYL_USE_COOPERATIVE
-        taskYIELD();
-#endif
-    }
-}
-
 
 #define LOG_DEBUG_LEVEL 24
 #define LOG_INFO_LEVEL 25
@@ -223,58 +173,8 @@ void itm_test(void *pvParameters) {
     }
 }
 
-// copyright ugfx.io
-void mandelbrot(float x1, float y1, float x2, float y2) {
-    unsigned int i, j, width, height;
-    uint16_t iter;
-    color_t color;
-    float fwidth, fheight;
-
-    float sy = y2 - y1;
-    float sx = x2 - x1;
-    const int MAX = 1024;
-
-    width = (unsigned int) gdispGetWidth();
-    height = (unsigned int) gdispGetHeight();
-    fwidth = width;
-    fheight = height;
-    void* test_entity = malloc(256);
-
-    for (i = 0; i < width; i++) {
-        for (j = 0; j < height; j++) {
-            float cy = j * sy / fheight + y1;
-            float cx = i * sx / fwidth + x1;
-            float x = 0.0f, y = 0.0f, xx = 0.0f, yy = 0.0f;
-            for (iter = 0; iter <= MAX && xx + yy < 4.0f; iter++) {
-                xx = x * x;
-                yy = y * y;
-                y = 2.0f * x * y + cy;
-                x = xx - yy + cx;
-            }
-            color = ((iter << 8) | (iter & 0xFF));
-            gdispDrawPixel(i, j, color);
-        }
-    }
-    free(test_entity);
-}
-
-void zoomIntoMandelbrot(float factor, float zoomThresholdReset, float offsetX, float offsetY) {
-    static float zoom = 1.0f;
-    mandelbrot(-2.0f * zoom + offsetX, -1.5f * zoom + offsetY, 2.0f * zoom + offsetX, 1.5f * zoom + offsetY);
-
-    zoom *= factor;
-    if (zoom <= zoomThresholdReset)
-        zoom = 1.0f;
-}
-
 void mainThread(void *pvParameters) {
     gfxInit();
-    while (TRUE) {
-        zoomIntoMandelbrot(0.7f, 0.001f, -0.086f, 0.85f);
-#ifdef PFYL_USE_COOPERATIVE
-        taskYIELD();
-#endif
-    }
 }
 
 
@@ -330,10 +230,8 @@ void __attribute__((no_instrument_function))  HAL_TIM_PeriodElapsedCallback(TIM_
 #endif
 
 int main(void) {
-    BaseType_t xReturned;
     TaskHandle_t xHandle = NULL;
     initAll();
-    void* some_persisted_pointer_to_trace = malloc(415);
 #ifdef USE_HW_TIMER
     InitTimer();
 #endif
@@ -347,19 +245,10 @@ int main(void) {
     InitUART1();
 #endif
 
-    xReturned = xTaskCreate(
+    xTaskCreate(
             mainThread,       /* Function that implements the task. */
             "Main",          /* Text name for the task. */
             1024,      /* Stack size in words, not bytes. */
-            (void *) 1,    /* Parameter passed into the task. */
-            tskIDLE_PRIORITY,/* Priority at which the task is created. */
-            &xHandle);
-
-
-    xReturned = xTaskCreate(
-            backgroundThread,       /* Function that implements the task. */
-            "Background",          /* Text name for the task. */
-            256,      /* Stack size in words, not bytes. */
             (void *) 1,    /* Parameter passed into the task. */
             tskIDLE_PRIORITY,/* Priority at which the task is created. */
             &xHandle);
@@ -369,4 +258,3 @@ int main(void) {
     }
 }
 
-#pragma clang diagnostic pop
